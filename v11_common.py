@@ -1,5 +1,5 @@
 """Shared code for the experiments of the paper (Sec. 3: Test / Update / Plan;
-Sec. 5: the single continuous, non-Gaussian toy).  Requires `pip install nbn`.
+Sec. 4: the single continuous, non-Gaussian toy).  Requires `pip install nbn`.
 
 Contents
   * the toy factored MDP (continuous, non-Gaussian, heteroscedastic) with a

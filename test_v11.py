@@ -110,9 +110,36 @@ def test_knn_append_exact():
     assert torch.allclose(l1, l2, atol=1e-5)
 
 
+def test_planning_cost_planner():
+    """planning_cost.plan = C.plan_actions; one-at-a-time and MPS plans score alike."""
+    import planning_cost as P
+    s1, s2 = C.eval_states()
+    m = oracle_model(False)
+    a_ref = C.plan_actions(m, s1, s2, seed=0)
+    a_new = P.plan(m, s1, s2, C.LW_PARTICLES, seed=0)
+    print(f"  chunked planner = plan_actions: {np.array_equal(a_ref, a_new)}")
+    assert np.array_equal(a_ref, a_new)
+    sc_b = P.score(a_new, s1, s2)
+    a_one = np.concatenate([P.plan(m, s1[j:j + 1], s2[j:j + 1], C.LW_PARTICLES, seed=j) for j in range(len(s1))])
+    sc_1 = P.score(a_one, s1, s2)
+    print(f"  plan score batched {sc_b:.3f}, one state at a time {sc_1:.3f}")
+    assert abs(sc_b - sc_1) < 0.02
+    if torch.backends.mps.is_available():
+        rng = np.random.default_rng(4)
+        lg = C.new_model("lg")
+        d = C.simulate(rng, 2000, False, False)
+        for n in C.TRANSITION_NODES:
+            C.fit_node(lg, "lg", n, d)
+        sc_cpu = P.score(P.plan(lg, s1, s2, C.LW_PARTICLES, seed=0), s1, s2)
+        sc_mps = P.score(P.plan(P.to_device(lg, "mps"), s1, s2, C.LW_PARTICLES, seed=0), s1, s2)
+        print(f"  linear-Gaussian NBN plan score CPU {sc_cpu:.3f}, MPS {sc_mps:.3f}")
+        assert abs(sc_cpu - sc_mps) < 0.02
+
+
 if __name__ == "__main__":
     for f in (test_calibration_and_power, test_planner_oracle,
-              test_raw_score_moves_under_behavior_shift, test_w1_metric, test_knn_append_exact):
+              test_raw_score_moves_under_behavior_shift, test_w1_metric, test_knn_append_exact,
+              test_planning_cost_planner):
         print(f.__name__)
         f()
     print("all checks passed")

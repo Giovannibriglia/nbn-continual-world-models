@@ -2,46 +2,90 @@
 
 Code for the NeurIPS 2026 workshop paper *Neural Bayesian Networks as Continual World Models for Reinforcement Learning* (Workshop on Continual World Models).
 
-## The idea in brief
+## The pipeline
 
-A Neural Bayesian Network (NBN) is a Bayesian network whose mechanisms, one per variable, are learned conditional densities, such as mixture density networks. The paper turns an NBN into a world model that keeps learning while the agent plans with it. For every new batch of experience, the pipeline does three things:
+A Neural Bayesian Network (NBN) is a Bayesian network whose mechanisms, one per variable, are learned conditional densities, such as mixture density networks [(Briglia et al., 2026)](https://arxiv.org/abs/2610.16902). The paper builds a pipeline with an NBN as its backbone, so that the NBN serves as a world model that keeps learning while the agent plans with it.
 
-1. **Test** each mechanism for change. The test compares conditionals given the parents, so a change in the agent's behavior does not raise false alarms. The per-mechanism likelihood, by contrast, does raise them.
-2. **Update** only the flagged mechanisms, by a restart. All other mechanisms keep their history.
-3. **Plan** by inference in the network. The query is p(a | s, goal reached), computed with batched likelihood weighting.
+The world model is a two-slice NBN over $(S_t, A_t, S_{t+1}, R_t)$: one learned mechanism per next-state variable, a behavior policy into the action, and a goal node $R$. On every new batch $W$ of experience, the pipeline runs three steps:
 
-The experiment is a single toy MDP with continuous, non-Gaussian dynamics (skewed and bimodal noise). Its timeline has two events: a change of the agent's behavior at phase 2 and a drift of one mechanism at phase 5. The pipeline is compared with a frozen model, pooled refitting, a sliding window, and a restart triggered by the raw likelihood.
+1. **Test: which mechanism changed?** For each mechanism $i$, test $H_0: X_i \perp E \mid \mathrm{Pa}(i)$, where $E$ tells the stored data from the new batch. The test is a matched-pair sign-flip permutation test: each new transition is paired with a stored one whose parents are close, and the test asks whether the parents predict the difference of the two children. It does not use the model, and a Bonferroni correction is applied over the mechanisms.
 
-The NBN library is [`nbn`](https://github.com/Giovannibriglia/NeuralBayesianNetworks) ([PyPI](https://pypi.org/project/nbn/)).
+   Why not the per-mechanism log-likelihood? Its expectation is $-\mathbb{E}_q[H(p^\star_i)] - \mathbb{E}_q[\mathrm{KL}(p^\star_i \Vert p_{\phi_i})]$, where $q$ is the distribution of the parents. The entropy term moves whenever the agent's behavior moves $q$, even if the mechanism is unchanged (Eq. 1 of the paper). The test compares conditionals, so it is not fooled by a change of behavior.
+2. **Update: change only what changed.** Each mechanism keeps the data $\mathcal{D}_i$ seen since its last restart. If the test flags it, it restarts from $W$. Otherwise $\mathcal{D}_i \gets \mathcal{D}_i \cup W$ and it is refit (warm start for MDNs).
+3. **Plan: ask the network which action succeeds.** With $R=1$ when the next state reaches the goal and a uniform prior on $A$, $p(a \mid s, R=1) \propto P(R=1 \mid s, do(a))$. The posterior is computed for all states in one batched likelihood-weighting call (2,048 particles per state), and the planned action is its mode.
+
+## The experiment (Section 4 and Appendix A of the paper)
+
+The world is a toy MDP with two continuous states and an action $A \in [-1, 1]$:
+- $S_1'$ is linear in $(S_1, A)$, with skewed noise;
+- $S_2'$ is nonlinear in $A$, with bimodal noise whose spread grows with $S_1$;
+- the goal is $|S_2'| < 0.2$.
+
+Experience arrives in 8 phases of 2,000 transitions, and the timeline has two events:
+- at phase 2 the **behavior** changes: other states are visited, and the policy depends on $S_1$; no mechanism changes;
+- at phase 5 the **mechanism** of $S_2'$ changes: the effect of the action is reversed.
+
+The pipeline (MDN mechanisms) is compared with four other ways to maintain the same NBN:
+- frozen after phase 0;
+- pooled refit on all data;
+- a sliding window (the last phase only);
+- *raw likelihood + restart*: the pipeline with the test replaced by a z-test for a drop of the log-likelihood.
+
+The metrics are the Wasserstein-1 distance of the model to the current dynamics, and the success of the planned action relative to the optimal one.
 
 ## Install
 
-Python 3.10 or later.
+Python 3.10 or later; tested with Python 3.12 on macOS.
 
 ```bash
 git clone https://github.com/Giovannibriglia/nbn-continual-world-models.git
 cd nbn-continual-world-models
-pip install -r requirements.txt      # nbn (with PyTorch), scipy, matplotlib
+pip install -r requirements.txt      # nbn==0.20.2 (with PyTorch), scipy, matplotlib
 ```
 
-## Run the experiments
+[`nbn`](https://github.com/Giovannibriglia/NeuralBayesianNetworks) is the NBN library ([PyPI](https://pypi.org/project/nbn/)). It is pinned to the version used for the paper.
 
-All scripts run on a laptop CPU; no GPU is needed.
+## Run
 
-| Command | What it does | Time |
-|---|---|---|
-| `python test_v11.py` | Sanity checks: calibration and power of the drift test, planner with the true dynamics (score 0.964), raw likelihood moving under a behavior shift, the W1 floor of the true model, and the exact kNN append. | ~30 s |
-| `python continual_v11.py [n_seeds]` | The full timeline (8 phases × 2,000 transitions) for MDN, kNN and linear-Gaussian NBNs and the five maintenance strategies. Writes `results_v11/continual_v11.json`. The paper uses 5 seeds (the default); use at least 2 seeds, since the summary reports standard deviations. | ~5 min per seed |
-| `python make_figures_v11_mdn.py` | Figure 2 of the paper (MDN mechanisms) from the JSON; prints the whole-timeline summary quoted in Section 5. Writes `Images/continual_v11_mdn.pdf/.png`. | a few s |
+All scripts run on a laptop CPU; no GPU is needed. Run them from the repository root.
 
-The results used in the paper are included in `results_v11/`, so the figure can be rebuilt without rerunning the experiment. Rerunning `continual_v11.py` overwrites them. The paper reports the MDN results; the script also runs kNN and linear-Gaussian mechanisms.
+| Step | Command | What it reproduces | Output | Time |
+|---|---|---|---|---|
+| 1 | `python test_v11.py` | Sanity checks (see below) | printed | ~1 min |
+| 2 | `python continual_v11.py [n_seeds]` | Section 4: the whole timeline for MDN, kNN and linear-Gaussian NBNs under the five strategies | `results_v11/continual_v11.json` | ~5 min per seed |
+| 3 | `python make_figures_v11_mdn.py` | Figure 2 (MDN mechanisms), and the whole-timeline summary quoted in Section 4 | `Images/continual_v11_mdn.pdf/.png` | seconds |
+| 4 | `python planning_cost.py [n_seeds]` | Appendix C: plan score vs particles; time per planned state, batched vs one state per call, on CPU (1 thread and PyTorch's default thread count) and on the Apple GPU (MPS) if available | `results_v11/planning_cost.json` | ~4 min per seed |
+| 5 | `python make_figure_planning_cost.py` | Figure 3 (Appendix C), and the numbers quoted there | `Images/planning_cost.pdf/.png` | seconds |
+
+- **Seeds:** the paper uses 5 seeds, which is the default. Use at least 2, because the summaries report standard deviations.
+- **Precomputed results:** the results used in the paper are in `results_v11/`, so steps 3 and 5 rebuild the figures without rerunning steps 2 and 4. Rerunning steps 2 and 4 overwrites those files.
+- **Timings:** they depend on the machine. The paper's are from an Apple M5 laptop.
+- **Mechanisms:** the paper reports the MDN results; step 2 also runs kNN and linear-Gaussian mechanisms.
+
+**What the checks in `test_v11.py` cover:**
+- calibration and power of the drift test, with and without a behavior shift;
+- the planner with the true dynamics (plan score 0.964);
+- the raw log-likelihood moving under a behavior shift even with the true mechanism;
+- the $W_1$ floor of the true model (0.070);
+- the exact kNN append;
+- the Appendix C planner: it returns the same actions as the paper's planner, and batched, one-state-at-a-time and MPS plans score alike.
+
+**Key numbers to expect (paper, 5 seeds):**
+- the test flags exactly the 5 real changes out of 70 tests, and nothing at the behavior shift; the raw likelihood flags $S_2'$ at the behavior shift in every run;
+- right after the drift, the pipeline plans at 92% of optimal, against 96% with the true dynamics and 25% for pooling.
 
 ## Files
 
-- `v11_common.py`: the toy MDP, the NBN world models, the drift test, the raw-likelihood detector, the planner (likelihood weighting), and the metrics.
-- `continual_v11.py`: the experiment.
-- `test_v11.py`: the checks.
-- `make_figures_v11_mdn.py`: the figure.
+| File | Content | Paper |
+|---|---|---|
+| `v11_common.py` | the toy MDP, the NBN world models (MDN, kNN, linear-Gaussian), the drift test, the raw-likelihood detector, the planner (likelihood weighting), the metrics | Sec. 3, 4; App. A |
+| `continual_v11.py` | the experiment: the timeline and the five maintenance strategies | Sec. 4 |
+| `make_figures_v11_mdn.py` | Figure 2 and the whole-timeline summary | Sec. 4 |
+| `planning_cost.py` | cost and accuracy of planning by inference | App. C |
+| `make_figure_planning_cost.py` | Figure 3 | App. C |
+| `test_v11.py` | the checks | — |
+| `results_v11/` | the results used in the paper (JSON, logs) | — |
+| `Images/` | the figures | — |
 
 ## Citation
 
@@ -51,6 +95,13 @@ The results used in the paper are included in `results_v11/`, so the figure can 
   author    = {Briglia, Giovanni and Lippi, Marco and Mariani, Stefano and Zambonelli, Franco},
   booktitle = {NeurIPS 2026 Workshop on Continual World Models},
   year      = {2026}
+}
+
+@article{briglia2026neural,
+  title   = {Neural {B}ayesian Networks for Modular and Scalable Decision-Making Under Uncertainty},
+  author  = {Briglia, Giovanni and Lippi, Marco and Mariani, Stefano and Zambonelli, Franco},
+  journal = {arXiv preprint arXiv:2610.16902},
+  year    = {2026}
 }
 ```
 

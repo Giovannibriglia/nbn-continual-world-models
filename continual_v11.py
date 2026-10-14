@@ -1,4 +1,4 @@
-"""One scenario, one timeline (paper, Sec. 5).
+"""One scenario, one timeline (paper, Sec. 4).
 
 Toy factored MDP with continuous, non-Gaussian dynamics (v11_common).  Eight
 phases of 2,000 transitions:
