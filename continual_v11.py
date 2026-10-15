@@ -5,8 +5,8 @@ phases of 2,000 transitions:
   phases 0-1   original behavior, original dynamics
   phase 2      BEHAVIOR SHIFT: states and policy change (mechanisms do not)
   phase 5      MECHANISM DRIFT: the effect of A on S2' is reversed (S1' unchanged)
-World models: NBN with MDN mechanisms or kNN mechanisms (plus a linear-Gaussian
-reference); queries answered by likelihood weighting.
+World models: NBN with MDN mechanisms (plus a linear-Gaussian reference);
+queries answered by likelihood weighting.
 Strategies (same model family, same data):
   frozen       fit on phase 0, never updated
   pooled       every mechanism refit on all data so far
@@ -37,7 +37,7 @@ SEEDS = range(int(sys.argv[1]) if len(sys.argv) > 1 else 5)   # first test: 5 se
 ALPHA = 0.01
 LEVEL = ALPHA / len(C.TRANSITION_NODES)
 STRATS = ("frozen", "pooled", "window", "raw-restart", "pipeline")
-FAMILIES = ("mdn", "knn", "lg")
+FAMILIES = ("mdn", "lg")
 
 
 def make_phases(seed):
@@ -53,15 +53,13 @@ def record(model, t):
                 plan=C.plan_score(model, drifted))
 
 
-# Single-threaded torch for the MDN and linear-Gaussian runs: with the default
-# thread pool, small MDN fits occasionally stall for minutes on macOS (an
-# OpenMP issue; the same fit takes ~1 s single-threaded).  kNN keeps the pool
-# for its neighbour searches.
-DEFAULT_THREADS = torch.get_num_threads()
+# Single-threaded torch: with the default thread pool, small MDN fits
+# occasionally stall for minutes on macOS (an OpenMP issue; the same fit takes
+# ~1 s single-threaded).
 
 
 def run(family, phases, seed):
-    torch.set_num_threads(DEFAULT_THREADS if family == "knn" else 1)
+    torch.set_num_threads(1)
     torch.manual_seed(seed)
     m0 = C.new_model(family)
     for n in C.TRANSITION_NODES:

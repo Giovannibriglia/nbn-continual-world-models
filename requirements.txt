@@ -1,3 +1,6 @@
 nbn==0.20.2
 scipy>=1.10
 matplotlib>=3.7
+pyro-ppl>=1.9
+numpyro>=0.19
+jax>=0.5

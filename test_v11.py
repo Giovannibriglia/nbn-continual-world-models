@@ -7,7 +7,6 @@
 3. Raw score: with the TRUE mechanisms, a behavior shift alone lowers the
    mean log-likelihood of S2' (Eq. 1: the entropy term moves with the parents).
 4. W1 metric: the true model has (near) zero error.
-5. kNN append is exact: refit on A|B equals fit on A then update with B.
 
 Run:  python test_v11.py
 """
@@ -16,7 +15,6 @@ import torch
 
 import v11_common as C
 from nbn.mechanisms.base import Mechanism
-from nbn.mechanisms.non_parametric.knn_conditional import KNNConditionalMechanism
 from nbn.utils.batching import pack_parents
 
 
@@ -94,22 +92,6 @@ def test_w1_metric():
     assert w < 0.08
 
 
-def test_knn_append_exact():
-    rng = np.random.default_rng(3)
-    a, b = C.simulate(rng, 500, False, False), C.simulate(rng, 500, True, False)
-    m = C.new_model("knn")
-    pa_names = m.dag.parents("S2n")
-    m1 = KNNConditionalMechanism(); m1.fit_local(a["S2n"], pack_parents(a, pa_names))
-    m1.update_local(b["S2n"], pack_parents(b, pa_names))
-    ab = C.concat([a, b])
-    m2 = KNNConditionalMechanism(); m2.fit_local(ab["S2n"], pack_parents(ab, pa_names))
-    q = C.simulate(rng, 200, False, False)
-    l1 = m1.log_prob(q["S2n"], pack_parents(q, pa_names))
-    l2 = m2.log_prob(q["S2n"], pack_parents(q, pa_names))
-    print(f"  kNN append vs refit, max |diff log-prob|: {float((l1 - l2).abs().max()):.2e}")
-    assert torch.allclose(l1, l2, atol=1e-5)
-
-
 def test_planning_cost_planner():
     """planning_cost.plan = C.plan_actions; one-at-a-time and MPS plans score alike."""
     import planning_cost as P
@@ -138,7 +120,7 @@ def test_planning_cost_planner():
 
 if __name__ == "__main__":
     for f in (test_calibration_and_power, test_planner_oracle,
-              test_raw_score_moves_under_behavior_shift, test_w1_metric, test_knn_append_exact,
+              test_raw_score_moves_under_behavior_shift, test_w1_metric,
               test_planning_cost_planner):
         print(f.__name__)
         f()

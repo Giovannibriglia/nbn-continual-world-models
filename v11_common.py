@@ -4,7 +4,7 @@ Sec. 4: the single continuous, non-Gaussian toy).  Requires `pip install nbn`.
 Contents
   * the toy factored MDP (continuous, non-Gaussian, heteroscedastic) with a
     behavior shift and a mechanism drift on one timeline;
-  * NBN world models whose transition mechanisms are MDN or kNN (nbn), with
+  * NBN world models whose transition mechanisms are MDN or linear-Gaussian (nbn), with
     fixed root mechanisms (states are observed, actions are chosen by the
     planner, so roots never need learning);
   * Test: matched-pair permutation test of "mechanism unchanged", per
@@ -31,7 +31,6 @@ from torch.distributions import Normal, Uniform
 from nbn import NeuralBayesianNetwork
 from nbn.inference.likelihood_weighting import LikelihoodWeightingEngine
 from nbn.mechanisms.base import Mechanism
-from nbn.mechanisms.non_parametric.knn_conditional import KNNConditionalMechanism
 from nbn.mechanisms.parametric.linear_gaussian import LinearGaussianMechanism
 from nbn.mechanisms.parametric.mdn import MDNMechanism
 from nbn.utils.batching import pack_parents
@@ -159,15 +158,13 @@ class FixedRoot(Mechanism):
         return True
 
 
-FAMILIES = ("mdn", "knn", "lg")
+FAMILIES = ("mdn", "lg")
 MDN_EPOCHS, MDN_EPOCHS_WARM = 200, 60
 
 
 def new_mechanism(family):
     if family == "mdn":
         return MDNMechanism(num_components=5, hidden=(64, 64))
-    if family == "knn":
-        return KNNConditionalMechanism()
     return LinearGaussianMechanism()
 
 
@@ -217,7 +214,7 @@ def fit_node(model, family, node, data, warm=False):
     if family == "mdn":
         mech.fit_local(data[node], pa, epochs=MDN_EPOCHS_WARM if warm else MDN_EPOCHS,
                        consolidate=False, warm_start=warm)
-    else:   # kNN stores the sample; LG solves the normal equations (both exact)
+    else:   # LG solves the normal equations (exact)
         model.mechanisms[node] = new_mechanism(family)
         model.mechanisms[node].fit_local(data[node], pa)
     model._cache_version += 1

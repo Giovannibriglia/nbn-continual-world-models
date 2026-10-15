@@ -1,17 +1,12 @@
 seed 0 mdn   44.3s | pipeline plan [0.93, 0.95, 0.94, 0.95, 0.95, 0.93, 0.93, 0.93] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
-seed 0 knn  218.6s | pipeline plan [0.72, 0.76, 0.73, 0.75, 0.76, 0.68, 0.66, 0.66] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
 seed 0 lg    15.7s | pipeline plan [0.74, 0.74, 0.73, 0.75, 0.73, 0.7, 0.7, 0.73] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
 seed 1 mdn   44.9s | pipeline plan [0.94, 0.95, 0.96, 0.96, 0.95, 0.89, 0.91, 0.94] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
-seed 1 knn  223.6s | pipeline plan [0.72, 0.76, 0.73, 0.78, 0.75, 0.6, 0.63, 0.59] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
 seed 1 lg    15.9s | pipeline plan [0.74, 0.74, 0.74, 0.74, 0.74, 0.73, 0.73, 0.74] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
 seed 2 mdn   44.2s | pipeline plan [0.94, 0.95, 0.95, 0.95, 0.95, 0.92, 0.94, 0.94] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 1, 0, 1, 0, 0]
-seed 2 knn  226.2s | pipeline plan [0.72, 0.75, 0.76, 0.77, 0.74, 0.55, 0.62, 0.6] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
 seed 2 lg    15.8s | pipeline plan [0.74, 0.74, 0.74, 0.74, 0.74, 0.73, 0.72, 0.73] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 1]
 seed 3 mdn   44.5s | pipeline plan [0.94, 0.95, 0.94, 0.96, 0.95, 0.94, 0.94, 0.91] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 1, 0, 1, 0, 0]
-seed 3 knn  222.0s | pipeline plan [0.76, 0.76, 0.77, 0.77, 0.77, 0.6, 0.64, 0.63] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
 seed 3 lg    15.8s | pipeline plan [0.74, 0.73, 0.73, 0.74, 0.73, 0.71, 0.73, 0.74] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
 seed 4 mdn   44.8s | pipeline plan [0.94, 0.95, 0.95, 0.95, 0.96, 0.92, 0.92, 0.94] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 1, 0, 1, 0, 0]
-seed 4 knn  224.8s | pipeline plan [0.74, 0.76, 0.74, 0.74, 0.75, 0.53, 0.6, 0.59] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
 seed 4 lg    15.9s | pipeline plan [0.73, 0.73, 0.74, 0.75, 0.74, 0.73, 0.73, 0.72] | flags S2' [0, 0, 0, 0, 1, 0, 0] raw S1' [0, 0, 0, 0, 0, 0, 0] raw S2' [0, 1, 0, 0, 1, 0, 0]
 
 mdn: W1 joint before/after/end | plan before/after/end
@@ -22,15 +17,6 @@ mdn: W1 joint before/after/end | plan before/after/end
   pipeline     0.097 / 0.141 / 0.118±0.008 | 0.953 / 0.922 / 0.930 | at shift KL 0.097 plan 0.947
   flags (runs of 10, phases 1..7): {'pipeline': {'S1n': [0, 0, 0, 0, 0, 0, 0], 'S2n': [0, 0, 0, 0, 5, 0, 0]}, 'raw-restart': {'S1n': [0, 0, 0, 0, 0, 0, 0], 'S2n': [0, 5, 3, 0, 5, 0, 0]}}
   pipeline seconds per phase: {'test': 0.036, 'update': 0.712, 'plan': 0.596}
-
-knn: W1 joint before/after/end | plan before/after/end
-  frozen       0.321 / 1.626 / 1.626±0.014 | 0.734 / 0.205 / 0.205 | at shift KL 0.321 plan 0.734
-  pooled       0.254 / 1.452 / 1.249±0.004 | 0.754 / 0.248 / 0.314 | at shift KL 0.257 plan 0.748
-  window       0.564 / 0.629 / 0.636±0.018 | 0.660 / 0.595 / 0.561 | at shift KL 0.565 plan 0.632
-  raw-restart  0.354 / 0.464 / 0.404±0.011 | 0.682 / 0.595 / 0.617 | at shift KL 0.408 plan 0.632
-  pipeline     0.254 / 0.464 / 0.404±0.011 | 0.754 / 0.595 / 0.617 | at shift KL 0.257 plan 0.748
-  flags (runs of 10, phases 1..7): {'pipeline': {'S1n': [0, 0, 0, 0, 0, 0, 0], 'S2n': [0, 0, 0, 0, 5, 0, 0]}, 'raw-restart': {'S1n': [0, 0, 0, 0, 0, 0, 0], 'S2n': [0, 5, 0, 0, 5, 0, 0]}}
-  pipeline seconds per phase: {'test': 0.035, 'update': 0.005, 'plan': 8.008}
 
 lg: W1 joint before/after/end | plan before/after/end
   frozen       0.273 / 1.563 / 1.563±0.010 | 0.737 / 0.180 / 0.180 | at shift KL 0.273 plan 0.737
