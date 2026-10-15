@@ -1,0 +1,72 @@
+  port check, max |log p - log p_nbn| / (1 + |log p_nbn|) (pyro, numpyro): {'S1n': (2.0352783849375555e-06, 1.6881443798411055e-06), 'S2n': (2.66411689153756e-06, 3.6304977584222797e-06)}
+seed 0 numpyro compile (s) per B: {'1': 2.77, '8': 2.92, '64': 3.37, '200': 3.53, '1024': 3.58}
+seed 0 B=    1 numpyro-vec/cuda batched          2.106 ms/state
+seed 0 B=    8 numpyro-vec/cuda batched          0.227 ms/state
+seed 0 B=   64 numpyro-vec/cuda batched          0.044 ms/state
+seed 0 B=  200 numpyro-vec/cuda batched          0.025 ms/state
+seed 0 B= 1024 numpyro-vec/cuda batched          0.018 ms/state
+seed 0          numpyro-vec/cuda one per call     1.925 ms/state
+seed 0 S=   64 numpyro-vec/cuda score 0.805     0.009 ms/state
+seed 0 S=  256 numpyro-vec/cuda score 0.879     0.013 ms/state
+seed 0 S= 1024 numpyro-vec/cuda score 0.926     0.018 ms/state
+seed 0 S= 2048 numpyro-vec/cuda score 0.942     0.026 ms/state
+seed 0 S= 4096 numpyro-vec/cuda score 0.953     0.042 ms/state
+seed 0 S= 8192 numpyro-vec/cuda score 0.955     0.077 ms/state
+  port check, max |log p - log p_nbn| / (1 + |log p_nbn|) (pyro, numpyro): {'S1n': (2.2646952402283205e-06, 2.478761643942562e-06), 'S2n': (4.316400463721948e-06, 4.117488060728647e-06)}
+seed 1 numpyro compile (s) per B: {'1': 2.45, '8': 2.86, '64': 3.16, '200': 3.47, '1024': 3.06}
+seed 1 B=    1 numpyro-vec/cuda batched          1.330 ms/state
+seed 1 B=    8 numpyro-vec/cuda batched          0.178 ms/state
+seed 1 B=   64 numpyro-vec/cuda batched          0.051 ms/state
+seed 1 B=  200 numpyro-vec/cuda batched          0.025 ms/state
+seed 1 B= 1024 numpyro-vec/cuda batched          0.020 ms/state
+seed 1          numpyro-vec/cuda one per call     1.989 ms/state
+seed 1 S=   64 numpyro-vec/cuda score 0.811     0.012 ms/state
+seed 1 S=  256 numpyro-vec/cuda score 0.873     0.015 ms/state
+seed 1 S= 1024 numpyro-vec/cuda score 0.910     0.020 ms/state
+seed 1 S= 2048 numpyro-vec/cuda score 0.937     0.025 ms/state
+seed 1 S= 4096 numpyro-vec/cuda score 0.937     0.048 ms/state
+seed 1 S= 8192 numpyro-vec/cuda score 0.945     0.075 ms/state
+  port check, max |log p - log p_nbn| / (1 + |log p_nbn|) (pyro, numpyro): {'S1n': (2.025888761636452e-06, 2.025888761636452e-06), 'S2n': (2.653752289916156e-06, 2.692212319743703e-06)}
+seed 2 numpyro compile (s) per B: {'1': 2.66, '8': 2.82, '64': 3.18, '200': 3.39, '1024': 3.09}
+seed 2 B=    1 numpyro-vec/cuda batched          1.360 ms/state
+seed 2 B=    8 numpyro-vec/cuda batched          0.289 ms/state
+seed 2 B=   64 numpyro-vec/cuda batched          0.042 ms/state
+seed 2 B=  200 numpyro-vec/cuda batched          0.026 ms/state
+seed 2 B= 1024 numpyro-vec/cuda batched          0.018 ms/state
+seed 2          numpyro-vec/cuda one per call     2.198 ms/state
+seed 2 S=   64 numpyro-vec/cuda score 0.811     0.007 ms/state
+seed 2 S=  256 numpyro-vec/cuda score 0.882     0.016 ms/state
+seed 2 S= 1024 numpyro-vec/cuda score 0.924     0.019 ms/state
+seed 2 S= 2048 numpyro-vec/cuda score 0.939     0.026 ms/state
+seed 2 S= 4096 numpyro-vec/cuda score 0.944     0.047 ms/state
+seed 2 S= 8192 numpyro-vec/cuda score 0.949     0.081 ms/state
+  port check, max |log p - log p_nbn| / (1 + |log p_nbn|) (pyro, numpyro): {'S1n': (1.7473881825935678e-06, 2.1095193005749024e-06), 'S2n': (3.4799397781171137e-06, 6.0594757087528706e-06)}
+seed 3 numpyro compile (s) per B: {'1': 2.64, '8': 2.92, '64': 3.21, '200': 3.42, '1024': 3.01}
+seed 3 B=    1 numpyro-vec/cuda batched          1.612 ms/state
+seed 3 B=    8 numpyro-vec/cuda batched          0.267 ms/state
+seed 3 B=   64 numpyro-vec/cuda batched          0.048 ms/state
+seed 3 B=  200 numpyro-vec/cuda batched          0.028 ms/state
+seed 3 B= 1024 numpyro-vec/cuda batched          0.019 ms/state
+seed 3          numpyro-vec/cuda one per call     2.086 ms/state
+seed 3 S=   64 numpyro-vec/cuda score 0.832     0.009 ms/state
+seed 3 S=  256 numpyro-vec/cuda score 0.862     0.016 ms/state
+seed 3 S= 1024 numpyro-vec/cuda score 0.922     0.019 ms/state
+seed 3 S= 2048 numpyro-vec/cuda score 0.940     0.026 ms/state
+seed 3 S= 4096 numpyro-vec/cuda score 0.944     0.047 ms/state
+seed 3 S= 8192 numpyro-vec/cuda score 0.950     0.079 ms/state
+  port check, max |log p - log p_nbn| / (1 + |log p_nbn|) (pyro, numpyro): {'S1n': (3.04091827274533e-06, 2.997476713062497e-06), 'S2n': (2.273375230288366e-06, 2.5260931124648778e-06)}
+seed 4 numpyro compile (s) per B: {'1': 2.89, '8': 3.0, '64': 3.3, '200': 3.65, '1024': 3.16}
+seed 4 B=    1 numpyro-vec/cuda batched          2.297 ms/state
+seed 4 B=    8 numpyro-vec/cuda batched          0.228 ms/state
+seed 4 B=   64 numpyro-vec/cuda batched          0.048 ms/state
+seed 4 B=  200 numpyro-vec/cuda batched          0.028 ms/state
+seed 4 B= 1024 numpyro-vec/cuda batched          0.019 ms/state
+seed 4          numpyro-vec/cuda one per call     2.150 ms/state
+seed 4 S=   64 numpyro-vec/cuda score 0.812     0.011 ms/state
+seed 4 S=  256 numpyro-vec/cuda score 0.871     0.014 ms/state
+seed 4 S= 1024 numpyro-vec/cuda score 0.908     0.018 ms/state
+seed 4 S= 2048 numpyro-vec/cuda score 0.932     0.025 ms/state
+seed 4 S= 4096 numpyro-vec/cuda score 0.943     0.043 ms/state
+seed 4 S= 8192 numpyro-vec/cuda score 0.951     0.080 ms/state
+wrote results_v11/engine_benchmark_threadsdefault_jaxcuda_numpyro.json
+NP_DONE

@@ -1,0 +1,9 @@
+  port check, max |log p - log p_nbn| / (1 + |log p_nbn|) (pyro, numpyro): {'S1n': (2.0352783849375555e-06, 1.6881443798411055e-06), 'S2n': (2.66411689153756e-06, 3.6304977584222797e-06)}
+seed 0 numpyro compile (s) per B: {'1': 2.83, '8': 2.81, '64': 3.33, '256': 3.24, '1024': 3.43}
+seed 0 B=    1 numpyro-vec/cuda 10240 queries in 10240 calls:    19.95 s (  1.949 ms/query)
+seed 0 B=    8 numpyro-vec/cuda 10240 queries in  1280 calls:     2.73 s (  0.266 ms/query)
+seed 0 B=   64 numpyro-vec/cuda 10240 queries in   160 calls:     0.53 s (  0.052 ms/query)
+seed 0 B=  256 numpyro-vec/cuda 10240 queries in    40 calls:     0.26 s (  0.025 ms/query)
+seed 0 B= 1024 numpyro-vec/cuda 10240 queries in    10 calls:     0.18 s (  0.018 ms/query)
+wrote results_v11/engine_benchmark_threadsdefault_jaxcuda_numpyro_workload10240.json
+NP_DONE

@@ -56,10 +56,13 @@ All scripts run on a laptop CPU; no GPU is needed. Run them from the repository 
 | 3 | `python make_figures_v11_mdn.py` | Figure 2 (MDN mechanisms), and the whole-timeline summary quoted in Section 4 | `Images/continual_v11_mdn.pdf/.png` | seconds |
 | 4 | `python planning_cost.py [n_seeds]` | Appendix C: plan score vs particles; time per planned state, batched vs one state per call, on CPU (1 thread and PyTorch's default thread count) and on the Apple GPU (MPS) if available | `results_v11/planning_cost.json` | ~4 min per seed |
 | 5 | `python make_figure_planning_cost.py` | Figure 3 (Appendix C), and the numbers quoted there | `Images/planning_cost.pdf/.png` | seconds |
+| 6 | `python engine_benchmark.py --seeds 5`; `python engine_benchmark.py --seeds 1 --workload 10240`; the same two with `--jax-platform cuda --only-numpyro` | Appendix C, Figure 4: the same planner in NBN, Pyro and NumPyro (same MDN weights, same estimator); plan score vs particles (5 seeds) and the time to answer 10,240 queries in calls of B states, on CPU and GPU (NumPyro's JAX compilation included in the figure) | `results_v11/engine_benchmark_*.json` | ~10 min per seed; ~15 min per workload run |
+| 7 | `python make_figure_engine_benchmark.py` | Figure 4 (Appendix C), and the numbers quoted there | `Images/engine_benchmark.pdf/.png` | seconds |
 
 - **Seeds:** the paper uses 5 seeds, which is the default. Use at least 2, because the summaries report standard deviations.
 - **Precomputed results:** the results used in the paper are in `results_v11/`, so steps 3 and 5 rebuild the figures without rerunning steps 2 and 4. Rerunning steps 2 and 4 overwrites those files.
-- **Timings:** they depend on the machine. The paper's are from an Apple M5 laptop.
+- **Timings:** they depend on the machine. Figure 3's are from an Apple M5 laptop. Figure 4's are from a Linux server with an NVIDIA TITAN X (Pascal) GPU; its results are in `results_v11/server/`, which step 7 reads.
+- **Step 6** also needs `pip install pyro-ppl numpyro` and, for NumPyro on a GPU, `pip install "jax[cuda12]"` (run it in a separate process with `--jax-platform cuda --only-numpyro`).
 - **Mechanisms:** the paper reports the MDN results; step 2 also runs kNN and linear-Gaussian mechanisms.
 
 **What the checks in `test_v11.py` cover:**
