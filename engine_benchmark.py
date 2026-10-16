@@ -1,4 +1,4 @@
-"""The planner of the paper in NBN, Pyro and NumPyro (Appendix C, Figure 3).
+"""The planner of the paper in NBN, Pyro and NumPyro (Sec. 4, Figure 2c; App. A).
 
 The query is the planner of Sec. 3 (4) and Sec. 4: for each state s,
 a*(s) = mode of p(a | s, R = 1), by likelihood weighting (uniform action
@@ -19,11 +19,11 @@ the engines differ only in how the computation is carried out:
 
 Two modes:
 
-  accuracy   Figure 3b: plan score on the 200 evaluation states for
+  accuracy   Appendix A (and Figure 3b): plan score on the 200 evaluation states for
              S in PARTICLES particles per state, CPU engines, --seeds seeds
              (the seed fixes the phase-0 data, the MDN fit and the particles).
              Output: results_v11/engine_accuracy.json
-  speed      Figure 3a: each engine answers the same --workload random
+  speed      Figure 2c: each engine answers the same --workload random
              states (default 10,240) at 2,048 particles, in workload / B
              calls of B states, B in BATCHES; one untimed call per engine and
              B, then the whole workload is timed once.  Torch engines run on

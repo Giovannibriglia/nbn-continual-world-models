@@ -1,4 +1,4 @@
-"""Planning by inference with the true dynamics (paper, Appendix C, Figure 3b),
+"""Planning by inference with the true dynamics (paper, Appendix A and Figure 3b),
 and the planner shared by engine_benchmark.py and test_v11.py.
 
 The planner of Sec. 3 (4) and Sec. 4: a*(s) = mode of p(a | s, R = 1), computed
@@ -10,7 +10,7 @@ actions as v11_common.plan_actions).
 
 main() runs the planner with the TRUE mechanisms on the 200 evaluation states
 for S in {64, ..., 8192} particles per state, seeds 0..n_seeds-1 (the seed
-fixes the particles): the dashed reference curve of Figure 3b.
+fixes the particles): the true-dynamics reference of Appendix A and Figure 3b.
 
 Output: results_v11/planning_cost.json
 Run:    python planning_cost.py [n_seeds=5]
