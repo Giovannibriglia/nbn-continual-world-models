@@ -1,4 +1,4 @@
-"""Figure 4 of the paper (Appendix C), from the results of engine_benchmark.py.
+"""Figure 3 of the paper (Appendix C), from the results of engine_benchmark.py.
 
   (a) speed relative to vectorized Pyro on the same device (dashed, 1x), for a
       fixed workload of 10,240 queries (2,048 particles each) answered in
@@ -8,8 +8,8 @@
       steady-state call) is added to the time of the workload;
       (results_v11/engine_speed.json, results_v11/engine_speed_numpyro_cuda.json)
   (b) plan score vs particles per state on the 200 evaluation states, CPU
-      engines, mean +- 1 s.d. over seeds, as in Figure 3a, with the same
-      planner on the true dynamics as reference
+      engines, mean +- 1 s.d. over seeds, with the same planner on the true
+      dynamics as reference (planning_cost.py)
       (results_v11/engine_accuracy.json, results_v11/planning_cost.json).
 Also prints the numbers quoted in Appendix C.
 Writes Images/engine_benchmark.pdf (+ .png).
@@ -30,7 +30,7 @@ SPEED = [p for p in ("results_v11/engine_speed.json", "results_v11/engine_speed_
 ACC = json.load(open("results_v11/engine_accuracy.json"))
 TRUE = json.load(open("results_v11/planning_cost.json"))["score"]["true"]
 INK, MUTED = "#333333", "#888888"
-# Colour = engine (blue = NBN, as in Figures 2-3).
+# Colour = engine (blue = NBN, as in Figure 2).
 ENGINE = {"nbn": ("#2a78d6", "NBN"), "pyro-vec": ("#eb6834", "Pyro"), "numpyro-vec": ("#1baf7a", "NumPyro")}
 DEVICE_NAME = {"cpu": "CPU", "cuda": "GPU"}
 LINE = dict(ls="-", marker="o", ms=3.5, lw=1.4)
